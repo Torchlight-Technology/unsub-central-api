@@ -1,0 +1,7 @@
+{
+    "name": "torchlighttechnology/unsub-central-api",
+    "description": "Unsub Central PHP Client",
+    "autoload": {
+        "classmap": ["lib"]
+    }
+}
