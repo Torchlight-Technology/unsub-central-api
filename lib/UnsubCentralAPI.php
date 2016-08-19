@@ -6,7 +6,7 @@ class UnsubCentralAPI
 {
 	protected $username;
 	protected $password;
-	protected $api_host = 'http://go.unsubcentral.com/api/service';
+	protected $api_host = 'https://go.unsubcentral.com/api/service';
 
 	public function __construct($username, $password)
 	{
@@ -19,15 +19,15 @@ class UnsubCentralAPI
 		$endpoint = '/addresses/check';
 		$payload = array(
 			'email' => $email,
-			'key' => $aff_key,
+			'keyString' => $aff_key,
 			's' => $aff_salt
 		);
 
-		return $this->api_request($endpoint, $payload)
+		return $this->api_request($endpoint, $payload);
 	}
 
     protected function build_path($endpoint) {
-        $path = sprintf('/%s', $endpoint);
+        $path = sprintf('%s', $endpoint);
 
         $path = sprintf('%s%s',
             $this->api_host,
@@ -42,7 +42,7 @@ class UnsubCentralAPI
 		$path = $this->build_path($endpoint);
 
 		$http_headers = array(
-			'Authorization: Basic '. base64_encode($username.':'.$password)
+			'authorization: Basic '. base64_encode($this->username.':'.$this->password)
 		);
 
 		$ch = curl_init($path);
@@ -50,6 +50,7 @@ class UnsubCentralAPI
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 
 		$result = curl_exec($ch);
 		$error = curl_error($ch);
@@ -57,6 +58,10 @@ class UnsubCentralAPI
 
 		curl_close($ch);
 
-		return $result;
+		if ($errorno) {
+			return false;
+		} else {
+			return $result;
+		}
 	}
 }
