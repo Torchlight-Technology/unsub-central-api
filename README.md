@@ -9,7 +9,10 @@ Usage in your project
 ```php
 use torchlighttechnology\UnsubCentralAPI;
 
-$client = new UnsubCentralAPI;
+$client = new UnsubCentralAPI(
+	'USERNAME',
+	'PASSWORD'
+);
 
 $email = 'test@test.com';
 $aff_key = 'YOUR_AFFILIATE_KEY';
